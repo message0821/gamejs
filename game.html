@@ -51,8 +51,7 @@
         window.addEventListener('keydown',function(event){
             g.keydowns[event.key] = true
         })
-        window.addEventListener('keydup',function(event){
-
+        window.addEventListener('keyup',function(event){
             g.keydowns[event.key] = false
         })
         g.registerAction = function(key, callback){
@@ -91,8 +90,8 @@
 
         }
         game.draw = function() {
-            game.context.drawImage(paddle.image, paddle.x, paddle.y);
-            // game.draw(paddle)
+            // game.context.drawImage(paddle.image, paddle.x, paddle.y);
+            game.drawImage(paddle)
         }
 
     }
