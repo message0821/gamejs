@@ -44,12 +44,15 @@
         var context = canvas.getContext('2d')
         g.canvas = canvas;
         g.context = context;
+        g.drawImage = function(guaImage) {
+            g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
+        }
         //events
         window.addEventListener('keydown',function(event){
             g.keydowns[event.key] = true
         })
         window.addEventListener('keydup',function(event){
-            debugger
+
             g.keydowns[event.key] = false
         })
         g.registerAction = function(key, callback){
@@ -58,10 +61,10 @@
         //timer
         setInterval(function(){
             var actions = Object.keys(g.actions)
-            for(var i =0; i<actions.length;i++){
+            for (var i = 0; i < actions.length; i++) {
                 var key = actions[i]
-                if(g.keydowns[key]){
-                    //如果按键被按下，调用注册的action
+                if(g.keydowns[key]) {
+                    // 如果按键被按下, 调用注册的 action
                     g.actions[key]()
                 }
             }
