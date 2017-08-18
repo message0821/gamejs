@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>game 1</title>
+    <style>
+    canvas{ border: 1px solid black;}
+    </style>
+</head>
+<body>
+    <canvas id="id-canvas" width="400" height="300"></canvas>
+<script>
+    var log = console.log.bind(console);
+    var imageFromPath = function( path ){
+        var img = new Image();
+        img.src = path;
+        return img
+    }
+    var Paddle = function() {
+        var image = imageFromPath('paddle.png')
+        var o = {
+            image : image,
+            x: 100,
+            y: 200,
+            speed : 5,
+        }
+        o.moveLeft = function(){
+            o.x -= o.speed
+        }
+        o.moveRight = function(){
+            o.x += o.speed
+        }
+        return o;
+    };
+
+    var GuaGame = function(){
+        var g = {
+            actions: {},
+            keydowns: {}
+        }
+        var canvas = document.querySelector('#id-canvas')
+        var context = canvas.getContext('2d')
+        g.canvas = canvas;
+        g.context = context;
+        //events
+        window.addEventListener('keydown',function(event){
+            g.keydowns[event.key] = true
+        })
+        window.addEventListener('keydup',function(event){
+            debugger
+            g.keydowns[event.key] = false
+        })
+        g.registerAction = function(key, callback){
+            g.actions[key] = callback
+        }
+        //timer
+        setInterval(function(){
+            var actions = Object.keys(g.actions)
+            for(var i =0; i<actions.length;i++){
+                var key = actions[i]
+                if(g.keydowns[key]){
+                    //如果按键被按下，调用注册的action
+                    g.actions[key]()
+                }
+            }
+            g.update()
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            g.draw()
+        },1000/30)
+        return g;
+    }
+
+    var __main = function() {
+
+        var paddle = Paddle()
+        var game = GuaGame()
+
+        game.registerAction('a',function(){
+            paddle.moveLeft()
+        })
+        game.registerAction('d',function(){
+            paddle.moveRight()
+        })
+
+        game.update = function(){
+
+        }
+        game.draw = function() {
+            game.context.drawImage(paddle.image, paddle.x, paddle.y);
+            // game.draw(paddle)
+        }
+
+    }
+    __main();
+
+</script>
+</body>
+</html>
